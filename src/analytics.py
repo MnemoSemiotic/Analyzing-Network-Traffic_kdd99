@@ -2,6 +2,7 @@ import os
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from collections import defaultdict
 
 def main():
     pass
@@ -10,67 +11,45 @@ def create_random_samples(filepath, n_samples=1000, outputname='subsample_0.csv'
     '''
     using coreutils gshuf, create a random sample
     requires brew install coreutils
+
+    if using on linux, change gshuf to shuf
     '''
     os.system('gshuf -n {} {} > {}'.format(n_samples, filepath, outputname))
 
-def plot_hist_basic(df, col):
-    """Return a Matplotlib axis object with a histogram of the data in col.
-
-    Plots a histogram from the column col of dataframe df.
-
-    Parameters
-    ----------
-    df: Pandas DataFrame
-
-    col: str
-        Column from df with numeric data to be plotted
-
-    Returns
-    -------
-    ax: Matplotlib axis object
-    """
-
-    data = df[col]
-    ax = data.hist(bins=20, normed=1, edgecolor='none', figsize=(10, 7), alpha=.5)
-    ax.set_ylabel('Probability Density')
-    ax.set_title(col)
-    plt.xticks(rotation=40)
-    return ax
-
-def corr_heat(df):
-    corr = df.corr()
-    mask = np.zeros_like(corr, dtype=np.bool)
-    mask[np.triu_indices_from(mask)] = True
-    f, ax = plt.subplots(figsize=(12, 12))
-    cmap = sns.diverging_palette(220, 10, as_cmap=True)
-    sns.heatmap(corr, mask=mask, cmap=cmap, vmax=1, center=0,
-                square=True, linewidths=.5, cbar_kws={"shrink": .5},xticklabels=corr.index, yticklabels=corr.columns)
-    plt.xticks(rotation=60, ha="right")
-    plt.yticks(rotation=0)
-    ax.set_title("Correlation Heat Map")
-    plt.show()
-
-def covariance(x,y):
+def count_column_uniques(df):
     '''
-        INPUT: a numpy array or pandas scalar
-        Return: the covariance of the data
+        INPUT: a pandas dataframe
+        Return: dictionary of the unique values in each
+                column of a dataframe
+                {'column_name': ['unique_val_1', 'unique_val_2']...
+                }
     '''
-    cov = 0
-    x_mean = x.mean()
-    y_mean = y.mean()
-    '''
-    for ind in range(len(x.index)):
-        cov += (x[ind]-x_mean)*(y[ind]-y_mean)
-        '''
-    cov = ((x-x_mean)*(y-y_mean)).sum()
-    return cov/len(x.index)
+    return {col:list(df[col].unique())
+            for col in df.select_dtypes(include=['object']).columns}
 
+def count_zeros_ratio(df):
+    '''
+        INPUT: a pandas dataframe
+        Return: dictionary of the zero ratio and count in each
+                column of a dataframe
+                {'column_name': [percent, count] ...
+                }
+    '''
 
-def correlation(x,y):
+    return {col: [df[col][df[col] == 0].count() / len(df), df[col][df[col] == 0].count()]
+            for col in df.select_dtypes(include=['object', 'int64']).columns}
+
+def count_zeros_message(df):
     '''
-        INPUT: a numpy array or pandas scalar
-        Return: the correlation of the data
+    INPUT: a pandas dataframe
+    Return: String with message giving column names that have only
+            zeros for the sample counted
     '''
-    return covariance(x,y)/(x.std()*y.std())
+    zero_counts = count_zeros_ratio(df)
+    message = 'At {} samples:\n'.format(len(df))
+    for k, v in zero_counts.items():
+        if v[1] == len(df):
+            message += ('   {} has only zero values\n'.format(k))
+    return message
 
 if __name__ == "__main__": main()
