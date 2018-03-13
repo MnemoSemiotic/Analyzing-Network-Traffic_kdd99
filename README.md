@@ -6,7 +6,11 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 2. Can the 0-heavy features be dropped?
 3. What features should be dummy-ized?
 
-
+Attacks fall into these 4 main categories:
+- DOS: denial-of-service, e.g. syn flood;
+- R2L: unauthorized access from a remote machine, e.g. guessing password;
+- U2R:  unauthorized access to local superuser (root) privileges, e.g., various ``buffer overflow'' attacks;
+- probing: surveillance and other probing, e.g., port scanning.
 
 #### Features in the raw dataset
 | Column Name  | Type of Data  | Description      |
