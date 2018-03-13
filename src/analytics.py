@@ -27,15 +27,16 @@ def count_column_uniques(df):
     return {col:list(df[col].unique())
             for col in df.select_dtypes(include=['object']).columns}
 
-def count_column_zeros(df):
+def count_zeros_ratio(df):
     '''
         INPUT: a pandas dataframe
-        Return: dictionary of the zero ratio in each
+        Return: dictionary of the zero ratio and count in each
                 column of a dataframe
-                {'column_name': 0.57...
+                {'column_name': [percent, count] ...
                 }
     '''
-    return {col:df[col][df[col] == 0].count() / len(df)
-            for col in df.select_dtypes(include=['object', 'int64]').columns}
+
+    return {col: [df[col][df[col] == 0].count() / len(df), df[col][df[col] == 0].count()]
+            for col in df.select_dtypes(include=['object', 'int64']).columns}
 
 if __name__ == "__main__": main()
