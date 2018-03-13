@@ -4,7 +4,7 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 ### 3 Questions:
 1. Is it possible to effectively predict the label (attack name or normal) of the entry without knowing the protocol?
 2. Can the 0-heavy features be dropped?
-3. 
+3. What features should be dummy-ized?
 
 
 
