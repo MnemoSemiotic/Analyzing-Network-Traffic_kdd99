@@ -8,16 +8,28 @@ from collections import defaultdict
 def main():
     pass
 
-def rewrite_values(df, dict_map, column_name):
-
+def rewrite_values(df, dict_map, col_name, new_col_name):
+    '''
+    INPUT:  a pandas dataframe
+           dict of column values to with values that should map to them
+           string with the new column name
+    Return: Return a new dataframe with new column added, all values
+           represented by their categories
+    '''
     # here we don't want to alter the original dataframe
     df2 = df.copy()
 
-    df2.replace({column_name: dict_map}, inplace=True)
+    df2[new_col_name] = 0
+
+
+    df2[new_col_name] = df.apply(lambda row: dict_map[row[col_name]], axis=1)
 
     return df2
 
-def my_create_dummies(df, col_list, column_name):
+# def _rewrite_helper(df, dict_map, col_name):
+#     if df[col_name] == dict_map[]
+
+def my_create_dummies(df, col_list, col_name):
         '''
         INPUT:  a pandas dataframe
                list of column values to be dummy-ized
@@ -31,7 +43,7 @@ def my_create_dummies(df, col_list, column_name):
             df3[k] = 0
 
         for k in col_list:
-            df3[k] = np.where(df[column_name] == k, 1, 0)
+            df3[k] = np.where(df[col_name] == k, 1, 0)
 
         return df3
 
