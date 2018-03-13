@@ -39,4 +39,17 @@ def count_zeros_ratio(df):
     return {col: [df[col][df[col] == 0].count() / len(df), df[col][df[col] == 0].count()]
             for col in df.select_dtypes(include=['object', 'int64']).columns}
 
+def count_zeros_message(df):
+    '''
+    INPUT: a pandas dataframe
+    Return: String with message giving column names that have only
+            zeros for the sample counted
+    '''
+    zero_counts = count_zeros_ratio(df)
+    message = 'At {} samples:\n'.format(len(df))
+    for k, v in zero_counts.items():
+        if v[1] == len(df):
+            message += ('   {} has only zero values\n'.format(k))
+    return message
+
 if __name__ == "__main__": main()
