@@ -66,11 +66,12 @@ def correlation(x,y):
     '''
     return covariance(x,y)/(x.std()*y.std())
 
-def log_label_for_connection_plot(df, col_name, x, hue, title):
+def log_label_for_factor_plot(df, col_name, x, hue, title):
     '''
-        INPUT: df: pandas dataframe
-                x: column name for the x-axis
-                hue: column name for what is being plotted against
+        INPUT:        df: pandas dataframe
+                col_name: column name for the x-axis
+                       x: what item in column to filter by
+                     hue: column name for y axis(what is being plotted against)
         Return: NONE, displays factorplot
     '''
     df2 = df[(df.protocol_type == x)]
