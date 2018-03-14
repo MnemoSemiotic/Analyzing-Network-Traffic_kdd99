@@ -18,16 +18,10 @@ def rewrite_values(df, dict_map, col_name, new_col_name):
     '''
     # here we don't want to alter the original dataframe
     df2 = df.copy()
-
     df2[new_col_name] = 0
-
-
     df2[new_col_name] = df.apply(lambda row: dict_map[row[col_name]], axis=1)
 
     return df2
-
-# def _rewrite_helper(df, dict_map, col_name):
-#     if df[col_name] == dict_map[]
 
 def my_create_dummies(df, col_list, col_name):
         '''
