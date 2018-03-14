@@ -66,4 +66,24 @@ def correlation(x,y):
     '''
     return covariance(x,y)/(x.std()*y.std())
 
+def log_label_for_connection_plot(df, col_name, x, hue, title):
+    '''
+        INPUT: df: pandas dataframe
+                x: column name for the x-axis
+                hue: column name for what is being plotted against
+        Return: NONE, displays factorplot
+    '''
+    df2 = df[(df.protocol_type == x)]
+
+    g = sns.factorplot(x=col_name,
+                       hue=hue,
+                       data=df2,
+                       kind='count',
+                       size=8,
+                       aspect=.9)
+
+    for ax, title in zip(g.axes.flat, title):
+        ax.set_title(title)
+        ax.set(yscale="log")
+
 if __name__ == "__main__": main()

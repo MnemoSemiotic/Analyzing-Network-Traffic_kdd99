@@ -1,10 +1,10 @@
 # analyzing-network-traffic_kdd99
 Tovio Roberts - Galvanize Data Science Analytics capstone
 
-### 3 Questions:
-1. Is it possible to predict the label (attack name or normal) of the entry without knowing the protocol?
-2. Can the 0-heavy/sparse features be dropped?
-3. ?
+### 3 Goals:
+1. Drop or merge 0-heavy/sparse features
+2. Predict specific attack category vs other attack categories
+3. Predict the label (attack name or normal) category of entries without knowing the protocol
 
 Attacks fall into these 4 main categories:
 - DOS: denial-of-service, e.g. syn flood;
