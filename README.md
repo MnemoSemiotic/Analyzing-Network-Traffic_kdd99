@@ -3,8 +3,8 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 
 ### 3 Questions:
 1. Is it possible to predict the label (attack name or normal) of the entry without knowing the protocol?
-2. Can the 0-heavy features be dropped?
-3. What features should be dummy-ized?
+2. Can the 0-heavy/sparse features be dropped?
+3. ?
 
 Attacks fall into these 4 main categories:
 - DOS: denial-of-service, e.g. syn flood;
