@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from collections import defaultdict
+import operator
 
 def main():
     pass
@@ -51,5 +52,20 @@ def count_zeros_message(df):
         if v[1] == len(df):
             message += ('   {} has only zero values\n'.format(k))
     return message
+
+def count_categories(df):
+    '''
+    INPUT: a pandas dataframe
+    Return: dictionary with keys of column names and
+            values of the count of unique items in
+            each column
+    '''
+    subset = df.select_dtypes(include=['object'])
+    cat_dict = {}
+    for column in df.columns:
+        cat_dict[column] = df.groupby(column).count().shape[0]
+    return cat_dict
+
+
 
 if __name__ == "__main__": main()
