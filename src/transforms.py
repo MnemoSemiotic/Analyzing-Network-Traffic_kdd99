@@ -23,6 +23,11 @@ def rewrite_values(df, dict_map, col_name, new_col_name):
 
     return df2
 
+def rewrite_category2_to_zeros(df):
+    df['attack_category'].replace([1,3,4], 0, inplace=False)
+    df['attack_category'].replace(2, 1, inplace=False)
+    return df
+
 def my_create_dummies(df, col_list, col_name):
         '''
         INPUT:  a pandas dataframe
