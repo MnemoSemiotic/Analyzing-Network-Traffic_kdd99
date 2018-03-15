@@ -66,6 +66,24 @@ def count_categories(df):
         cat_dict[column] = df.groupby(column).count().shape[0]
     return cat_dict
 
+def get_top_correlations(df, pos_thresh, neg_thresh):
+    '''
+    INPUT: df: a pandas dataframe
+           pos_thresh: value to filter above (ie .6 for greater than .6)
+           neg_thresh: value to filter below
+    Return: dictionary with keys of column names and
+            highly correlated column name
+    '''
+    c = df.corr()
 
+    s = c.unstack()
+    so = s.sort_values(kind="quicksort", ascending=False).dropna()
+
+    so = so[so < 1]
+    so = so[so > pos_thresh]
+    so = so[so > -1]
+    so = so[so > pos_thresh]
+    so = so[::2]
+    return dict(so)
 
 if __name__ == "__main__": main()
