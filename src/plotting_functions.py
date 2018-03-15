@@ -120,7 +120,10 @@ def my_confusion_matrix(y_test, y_pred):
     false_positive_rate = FP / (TN + FP)
 
     # Precision: When a positive value is predicted, how often is the prediction incorrect?false_positive_rate = FP / (TN + FP)
-    precision = TP / (TP + FP)
+    if TP + FP > 0:
+        precision = TP / (TP + FP)
+    else:
+        precision = 0
 
     print('True Positives: {}'.format(TP))
     print('True Negatives: {}'.format(TN))
@@ -135,6 +138,8 @@ def my_confusion_matrix(y_test, y_pred):
     print('confusion matrix')
     print(conf_mat)
     _plot_confusion_matrix(conf_mat)
+
+    return TN, FP, FN, TP, accuracy, recall, specificity, false_positive_rate, precision
 
 def _plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
     plt.imshow(cm, interpolation='nearest', cmap=cmap)

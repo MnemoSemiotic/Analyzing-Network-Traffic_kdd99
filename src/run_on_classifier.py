@@ -113,6 +113,8 @@ def run_classifier(df_, keep, classifier):
     # Predict the Test set results
     y_pred = classifier.predict(X_test) # vector giving prediction of each of the test set observations
     print('\n')
-    pltfuncs.my_confusion_matrix(y_test, y_pred)
+    TN, FP, FN, TP, accuracy, recall, specificity, false_positive_rate, precision = pltfuncs.my_confusion_matrix(y_test, y_pred)
+
+    return TN, FP, FN, TP, accuracy, recall, specificity, false_positive_rate, precision
 
 if __name__ == "__main__": main()
