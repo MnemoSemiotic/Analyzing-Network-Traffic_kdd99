@@ -30,7 +30,7 @@ def plot_hist_basic(df, col):
     plt.xticks(rotation=40)
     return ax
 
-def corr_heat(df):
+def corr_heat(df, title):
     # corr = df.corr()
     # mask = np.zeros_like(corr, dtype=np.bool)
     # mask[np.triu_indices_from(mask)] = True
@@ -49,7 +49,7 @@ def corr_heat(df):
     cmap = sns.color_palette('coolwarm')
     sns.heatmap(corr, mask=mask, cmap=cmap, center=0, square=True, linewidths=.5,
                 yticklabels=True, annot=True, fmt='.2f', cbar_kws={'shrink':.5})
-    plt.title('Correlation Matrix', fontsize=20)
+    plt.title(title, fontsize=20)
     plt.xticks(rotation=90, fontsize=11)
     plt.yticks(rotation=0, fontsize=11)
     plt.tight_layout()
