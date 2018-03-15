@@ -31,17 +31,29 @@ def plot_hist_basic(df, col):
     return ax
 
 def corr_heat(df):
+    # corr = df.corr()
+    # mask = np.zeros_like(corr, dtype=np.bool)
+    # mask[np.triu_indices_from(mask)] = True
+    # f, ax = plt.subplots(figsize=(12, 12))
+    # cmap = sns.diverging_palette(220, 10, as_cmap=True)
+    # sns.heatmap(corr, mask=mask, cmap=cmap, vmax=1, center=0,
+    #             square=True, linewidths=.5, cbar_kws={"shrink": .5},xticklabels=corr.index, yticklabels=corr.columns)
+    # plt.xticks(rotation=60, ha="right")
+    # plt.yticks(rotation=0)
+    # ax.set_title("Correlation Heat Map")
+    # plt.show()
     corr = df.corr()
     mask = np.zeros_like(corr, dtype=np.bool)
     mask[np.triu_indices_from(mask)] = True
-    f, ax = plt.subplots(figsize=(12, 12))
-    cmap = sns.diverging_palette(220, 10, as_cmap=True)
-    sns.heatmap(corr, mask=mask, cmap=cmap, vmax=1, center=0,
-                square=True, linewidths=.5, cbar_kws={"shrink": .5},xticklabels=corr.index, yticklabels=corr.columns)
-    plt.xticks(rotation=60, ha="right")
-    plt.yticks(rotation=0)
-    ax.set_title("Correlation Heat Map")
-    plt.show()
+    f, ax = plt.subplots(figsize=(17,15))
+    cmap = sns.color_palette('coolwarm')
+    sns.heatmap(corr, mask=mask, cmap=cmap, center=0, square=True, linewidths=.5,
+                yticklabels=True, annot=True, fmt='.2f', cbar_kws={'shrink':.5})
+    plt.title('Correlation Matrix', fontsize=20)
+    plt.xticks(rotation=90, fontsize=11)
+    plt.yticks(rotation=0, fontsize=11)
+    plt.tight_layout()
+
 
 def covariance(x,y):
     '''
