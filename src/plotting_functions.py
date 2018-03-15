@@ -99,4 +99,50 @@ def log_label_for_factor_plot(df, col_name, x, hue, title):
         ax.set_title(title)
         ax.set(yscale="log")
 
+def my_confusion_matrix(y_test, y_pred):
+    # Making Confusion Matrix
+    from sklearn.metrics import confusion_matrix
+
+
+    conf_mat = confusion_matrix(y_test, y_pred)
+    TN, FP, FN, TP = confusion_matrix(y_test, y_pred).ravel()
+
+    accuracy = (TP + TN)/(TP + TN + FP + FN)
+    classification_error  = (FP + FN)/(TP + TN + FP + FN)
+
+    # Sensitivity/True Positive Rate/Recall: When the actual value is positive, how often is the prediction correct?
+    recall = TP / (TP + FN)
+
+    # Specificity: When the actual value is negative, how often is the prediciton correct?
+    specificity = TN / (TN + FP)
+
+    # False Positive Rate: When the actual value is negative, how often is the prediction incorrect?
+    false_positive_rate = FP / (TN + FP)
+
+    # Precision: When a positive value is predicted, how often is the prediction incorrect?false_positive_rate = FP / (TN + FP)
+    precision = TP / (TP + FP)
+
+    print('True Positives: {}'.format(TP))
+    print('True Negatives: {}'.format(TN))
+    print('False Positives: {}'.format(FP))
+    print('True Negatives: {}'.format(FN))
+    print()
+    print('Accuracy: {}'.format(accuracy))
+    print('Classification_error: {}'.format(classification_error))
+    print('Recall: {}'.format(recall))
+    print('Precision: {}'.format(precision))
+    print()
+    print('confusion matrix')
+    print(conf_mat)
+    _plot_confusion_matrix(conf_mat)
+
+def _plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar
+    plt.tight_layout
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+
 if __name__ == "__main__": main()
