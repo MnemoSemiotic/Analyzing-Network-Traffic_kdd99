@@ -52,10 +52,10 @@ def split_to_5050(df):
     val_counts = df['attack_category'].value_counts()
     if val_counts[0] < val_counts[1]:
         N = val_counts[0]
-        print('removed {} rows'.format(val_counts[1]-val_counts[0]))
+        # print('removed {} rows'.format(val_counts[1]-val_counts[0]))
     else:
         N = val_counts[1]
-        print('removed {} rows'.format(val_counts[0]-val_counts[1]))
+        # print('removed {} rows'.format(val_counts[0]-val_counts[1]))
     return df.sample(frac=1).groupby('attack_category', sort=False).head(N)
 
 def read_data(sample_name):
@@ -111,12 +111,12 @@ def drop_zeros_columns(df):
     for i in list(df.columns):
         if df[i].min() == df[i].max():
             df.drop([i], axis=1, inplace=True)
-            print('dropped {}'.format(i))
+            # print('dropped {}'.format(i))
 
 def drop_if_in(df, col_name):
     if col_name in df:
         df.drop(col_name, axis=1, inplace=True)
-        print('dropped {}'.format(col_name))
+        # print('dropped {}'.format(col_name))
 
 def drop_high_correlations(df_, pos_thresh=0.6, neg_thresh=-0.6):
     # gets a dictionary of the top encoded features
@@ -128,5 +128,10 @@ def drop_high_correlations(df_, pos_thresh=0.6, neg_thresh=-0.6):
 
     return df_
 
+def drop_all_except(df_, keep):
+    for i in list(df_.columns):
+        if i != 'label' and i not in keep and i !='attack_category':
+            drop_if_in(df_, i)
+    return df_
 
 if __name__ == "__main__": main()

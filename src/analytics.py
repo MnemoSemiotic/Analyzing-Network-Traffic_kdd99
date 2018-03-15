@@ -86,4 +86,10 @@ def get_top_correlations(df, pos_thresh, neg_thresh):
     so = so[::2]
     return dict(so)
 
+# create dict based on dtypes
+def get_dict_of_dtypes(df):
+    g = df.columns.to_series().groupby(df.dtypes).groups
+    df_dtypes = {k.name: v for k, v in g.items()}
+    return df_dtypes
+
 if __name__ == "__main__": main()
