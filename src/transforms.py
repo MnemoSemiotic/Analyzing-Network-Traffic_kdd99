@@ -4,6 +4,7 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 from collections import defaultdict
+import src.analytics as tics
 
 def main():
     pass
@@ -116,5 +117,16 @@ def drop_if_in(df, col_name):
     if col_name in df:
         df.drop(col_name, axis=1, inplace=True)
         print('dropped {}'.format(col_name))
+
+def drop_high_correlations(df_, pos_thresh=0.6, neg_thresh=-0.6):
+    # gets a dictionary of the top encoded features
+    top_correlations = tics.get_top_correlations(df_, .6, -.6)
+
+    # Time to actually drop some features, in particular anything correlated above .80 above
+    for column in top_correlations:
+        drop_if_in(df_, column[0])
+
+    return df_
+
 
 if __name__ == "__main__": main()
