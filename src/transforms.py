@@ -46,6 +46,17 @@ def my_create_dummies(df, col_list, col_name):
 
         return df3
 
+# split to 50% 0s, 50% 1s
+def split_to_5050(df):
+    val_counts = df['attack_category'].value_counts()
+    if val_counts[0] < val_counts[1]:
+        N = val_counts[0]
+        print('removed {} rows'.format(val_counts[1]-val_counts[0]))
+    else:
+        N = val_counts[1]
+        print('removed {} rows'.format(val_counts[0]-val_counts[1]))
+    return df.sample(frac=1).groupby('attack_category', sort=False).head(N)
+
 def read_data(sample_name):
     # Create list of column names
     columns = ['duration',
@@ -100,5 +111,10 @@ def drop_zeros_columns(df):
         if df[i].min() == df[i].max():
             df.drop([i], axis=1, inplace=True)
             print('dropped {}'.format(i))
+
+def drop_if_in(df, col_name):
+    if col_name in df:
+        df.drop(col_name, axis=1, inplace=True)
+        print('dropped {}'.format(col_name))
 
 if __name__ == "__main__": main()
