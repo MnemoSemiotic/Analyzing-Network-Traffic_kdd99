@@ -94,4 +94,11 @@ def read_data(sample_name):
     df.columns = columns
     return df
 
+# Drop columns with zero values
+def drop_zeros_columns(df):
+    for i in list(df.columns):
+        if df[i].min() == df[i].max():
+            df.drop([i], axis=1, inplace=True)
+            print('dropped {}'.format(i))
+
 if __name__ == "__main__": main()
