@@ -333,18 +333,4 @@ confusion matrix
 |is_hot_login |	1 if the login belongs to the ``hot'' list; 0 otherwise |	discrete
 |is_guest_login |	1 if the login is a ``guest''login; 0 otherwise 	|discrete
 
-## Table 2: Content features within a connection suggested by domain knowledge.
-
-|feature name	|description 	|type|
-|-----------|---------------|----|
-|count |	number of connections to the same host as the current connection in the past two seconds |	continuous
-Note: The following  features refer to these same-host connections.
-serror_rate 	% of connections that have ``SYN'' errors 	continuous
-rerror_rate 	% of connections that have ``REJ'' errors 	continuous
-same_srv_rate 	% of connections to the same service 	continuous
-diff_srv_rate 	% of connections to different services 	continuous
-srv_count 	number of connections to the same service as the current connection in the past two seconds 	continuous
-Note: The following features refer to these same-service connections.
-srv_serror_rate 	% of connections that have ``SYN'' errors 	continuous
-srv_rerror_rate 	% of connections that have ``REJ'' errors 	continuous
-srv_diff_host_rate 	% of connections to different hosts 	continuous
+**for more info: http://kdd.ics.uci.edu/databases/kddcup99/task.html**
