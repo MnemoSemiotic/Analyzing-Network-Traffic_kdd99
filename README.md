@@ -369,6 +369,8 @@ chi-square test statistic: 33421.43
 -------------------------------
 
 # Bringing this into the world
+- Currently not very useful or meaningful
+  - should really use combinations of at least 2 features
 - How well can `derived features` be discerned in real time?
   - How few computed features do you need to make a good guess
   - What is the computation cost on the derivation of any given feature in real time
