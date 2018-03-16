@@ -4,7 +4,7 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 # Overview
 
 ## Questions:
-- What do you do with directly correlated/Y-derived data?
+- What do you do with highly correlated and partially Y-derived data?
 - Why might it be worthwhile to make categorical predictions on derived features?
 
 <br><br><br><br>
