@@ -6,14 +6,15 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 ## Questions:
 - What do you do with feature engineered (Y-derived) data?
 - Why might it be worthwhile to make categorical predictions on derived features?
-- What would my next steps be?
 
 <br><br><br><br>
 --------------------------------
 ## What I did
 - Explored the kdd99 data
 - Tested significant differences in ratios of attack categories
+- Downsampled majority class
 - Applied a logistic regression model to single features in order to compare False Negative and Accuracy rates
+
 <br><br><br><br><br><br><br><br>
 --------------------------------
 ## The original KD99 competition
@@ -317,44 +318,12 @@ chi-square test statistic: 33421.43
   - populate pandas dataframe with confusion matrix values
   - output metrics on each feature
 
-<br><br><br><br>
--------------------------------
-
-## Logistic Regression Results:
-#### ... on `duration`
-```
-#--------------------------------------------#
-     Running classifier on ['duration']
-#--------------------------------------------#
-
-
-Modified Y to balance 1s and 0s
-1    145236
-0    145236
-Name: attack_category, dtype: int64
-
-
-True Positives: 29159
-True Negatives: 2322
-False Positives: 26614
-True Negatives: 0
-
-Accuracy: 0.541
-Classification_error: 0.458
-Recall: 1.0
-Precision: 0.522
-False Negative Rate: 0.0
-
-confusion matrix
-[[ 2322 26614]
- [    0 29159]]
-
-```
 
 <br><br><br><br>
 -------------------------------
 
 #### ... on `service`
+- network service on the destination, e.g., http, telnet, etc.
 ```
 
  #--------------------------------------------#
@@ -371,7 +340,7 @@ confusion matrix
  True Positives: 28989
  True Negatives: 26437
  False Positives: 2551
- True Negatives: 118
+ False Negatives: 118
 
  Accuracy: 0.954
  Classification_error: 0.045
@@ -414,17 +383,17 @@ confusion matrix
 - Attempted to apply lasso, with little success
   - Instead incorporated `l1` into `LogisticRegression(penalty='l1')`
 - Built a pipeline, scrapped it in favor of utilities that call each other
-- Applied linear regression
-  - Seemed better to keep it simple, since any model can be passed in
+  - Tried crossval, but decided to get a working model first, ran out of time
 
 <br><br><br><br>
 -------------------------------
 
 # What I would like to add
 - Run the model on the actual test data
+- Train models on the other attack categories
 - Run Combinations on the features
 - Cost matrix for the theoretical ramifications of False Negatives
-- Pass in other models
+- pass in kNN model maybe?
 
 <br><br><br><br>
 -------------------------------

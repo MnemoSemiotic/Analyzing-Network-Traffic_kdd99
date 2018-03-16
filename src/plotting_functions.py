@@ -152,7 +152,7 @@ def my_confusion_matrix(y_test, y_pred, col):
     print('True Positives: {}'.format(TP))
     print('True Negatives: {}'.format(TN))
     print('False Positives: {}'.format(FP))
-    print('True Negatives: {}'.format(FN))
+    print('False Negatives: {}'.format(FN))
     print()
     print('Accuracy: {}'.format(accuracy))
     print('Classification_error: {}'.format(classification_error))
