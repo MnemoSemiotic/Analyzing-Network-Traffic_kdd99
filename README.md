@@ -214,7 +214,7 @@ obs = np.array([[icmp_obs_attacks,
       icmp_obs_normal],[tcp_obs_attacks, tcp_obs_normal]])
 chi2, p, dof, expected = chi2_contingency(obs)
 ```
-
+-The null hypothesis of independence is rejected if  chi-squared is large enough, because this means that observed frequencies and expected frequencies are far apart.
 <br><br><br><br>
 -------------------------------
 
@@ -244,6 +244,7 @@ chi-square test statistic: 192072.97
 
 
 ## Perform chi-square test for proportion
+
 
 #### RESULTS
 ```
