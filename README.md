@@ -4,18 +4,25 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 # Overview
 
 ## Questions:
-- What with feature engineered (Y-derived) data?
+- What do you do with feature engineered (Y-derived) data?
 - Why might it be worthwhile to make categorical predictions on derived features?
 - What would my next steps be?
 
+<br><br><br><br>
+--------------------------------
 ## What I did
 - Explored the kdd99 data
-- Tested significant differences in ratios of attack category
-- Applied a logistic regression model to discern 1 category
-- Compared performance of single features through the model
+- Tested significant differences in ratios of attack categories
+- Applied a logistic regression model to single features in order to compare False Negative and Accuracy rates
+<br><br><br><br><br><br><br><br>
+--------------------------------
+## The original KD99 competition
+- The data come from a machine learning competition held in 1999.  See http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html
+- The task was to create a predictive model able to categorize a wide variety of bad connections or attacks into four main categories.
+- Additionally, malicious connections should be categorized separately from "normal" connections.
 
-## About the original competition
-The data come from a machine learning competition held in 1999.  See http://kdd.ics.uci.edu/databases/kddcup99/kddcup99.html .  Essentially, the task was to create a predictive model able to categorize a wide variety of bad connections or attacks into four main categories.  Additionally, malicious connections should be categorized separately from "normal" connections.
+<br><br><br><br>
+--------------------------------
 
 ## Workflow
 - leveraged bash to pull arbitrary numbers of random samples from the data
@@ -26,12 +33,18 @@ The data come from a machine learning competition held in 1999.  See http://kdd.
   - not trapped in jupyter
 - Tried out a lot of things, abandoned almost everything
 
+<br><br><br><br>
+--------------------------------
+
 # Exploratory Data Analysis
 
 ## What is unique about this data?
   - It was generated artificially and shared incrementally as TCP dumps, totalling roughly 4GB in total.
   - Many of the 42 features were derived and interrelated with the predictant
   - A basic logistic regression model, given a set of features with < |0.60| correlation will easily predict on the training data at "too high" an accuracy.
+
+<br><br><br><br>
+--------------------------------
 
 ## The Data
 - no null values
@@ -41,26 +54,48 @@ The data come from a machine learning competition held in 1999.  See http://kdd.
   - service
   - flag
 
+<br><br><br><br>
+--------------------------------
+
+
 ![Too Much Smurf](/images/too_much_smurf.png)
 
 # Thus...
 
 ![ICMP Supreme](/images/icmp_supreme.png)
-- `ICMP` - (from wikipedia): is used by network devices, including routers, to send error messages and operational information indicating, for example, that a requested service is not available or that a host or router could not be reached. `ICMP` differs from transport protocols such as `TCP` and `UDP` in that it **is not typically used to exchange data** between systems, nor is it regularly employed by end-user network applications
+
+<br><br><br><br>
+-------------------------------
+
 ## Protocol Types
 ```
 icmp    405033
 tcp     267370
 udp      27597
 ```
+
+- `ICMP` - (from wikipedia): is used by network devices, including routers, to send error messages and operational information indicating, for example, that a requested service is not available or that a host or router could not be reached.
 - Keep in mind that many attack types only happen over certain protocols.
 
+<br><br><br><br>
+-------------------------------
+
 ![ICMP Attack Labels](/images/attack_names_by_icmp.png)
+
+<br><br><br><br>
+-------------------------------
+
 ![ICMP Attack Labels](/images/attack_names_by_tcp.png)
+
+<br><br><br><br>
+-------------------------------
+
 ![ICMP Attack Labels](/images/attack_names_by_udp.png)
 
+<br><br><br><br>
+-------------------------------
 
-## No Clear Distributions of Features
+## No Clear Distributions in Features
 
   ### High zero-only values for some columns:
   ```
@@ -69,16 +104,23 @@ udp      27597
    num_outbound_cmds has only zero values
    is_host_login has only zero values
   ```
+
+<br><br><br><br>
+-------------------------------
+
   ### Other features have weird distributions
   ![Weird Distribution](/images/weird_distribution.png)
 
 
-
-
+<br><br><br><br>
+-------------------------------
 
 ## Correlation
-#### How helpful is this Correlation Matrix?
+#### How helpful is this Correlation Heatmap?
 ![Raw Correlation Matrix](/images/correlation_matrix_before.png)
+
+<br><br><br><br>
+-------------------------------
 
 #### Not as helpful as a list of high correlations:
 ```
@@ -86,37 +128,18 @@ udp      27597
  ('dst_host_rerror_rate', 'dst_host_srv_rerror_rate'): 0.987
  ('dst_host_rerror_rate', 'srv_rerror_rate'): 0.985
  ('dst_host_same_src_port_rate', 'dst_host_same_srv_rate'): 0.676
- ('dst_host_same_src_port_rate', 'dst_host_srv_count'): 0.684
- ('dst_host_same_src_port_rate', 'same_srv_rate'): 0.668
- ('dst_host_same_src_port_rate', 'srv_count'): 0.947
- ('dst_host_same_srv_rate', 'dst_host_srv_count'): 0.979
- ('dst_host_same_srv_rate', 'srv_count'): 0.694
- ('dst_host_serror_rate', 'dst_host_srv_serror_rate'): 0.998
- ('dst_host_serror_rate', 'serror_rate'): 0.998
+
  ...
 ```
 
-## Putting attack labels into buckets
+<br><br><br><br>
+-------------------------------
 
-### Attack labels fall into 4 main categories:
-  0. Normal: not an attack
-  1. Probe: surveillance and other probing, e.g., port scanning
-  2. DOS: denial-of-service, e.g. syn flood
-  3. U2R:  unauthorized access to local superuser (root) privileges, e.g., various `buffer overflow`` attacks
-  4. R2L: unauthorized access from a remote machine, e.g. guessing password;
-
-  - **20 types of attack (labels) to be categorized for training**
-  ![Attack labels per category](/images/attack_labels_per_category.png)
-    - **0 - Normal: 139294 categorized**
-    - **1 - Probe: 5833 categorized**
-    - **2 - DOS: 554699 categorized**
-    - **3 - U2R: 8 categorized**
-    - **4 - R2L: 166 categorized**
 
 
 # Hypothesis Tests
 
-#### Question: Are the proportions of connections that are attacks ( that fall into the attack category, not normal) consistent across protocol types?
+### Are the proportions of connections that are attacks consistent across protocol types?
 - recall that `normal.` is not an attack.
 - we will use the general category to get counts
 
@@ -125,7 +148,10 @@ From the graphics above, it seems likely that ICMP garners a higher proportion o
 - df = 1
 - total sample size: 700000
 
-**Determine the proportion of attacks/connection for each protocol_type**
+<br><br><br><br>
+-------------------------------
+
+### Proportion of attacks/connections for each protocol_type
 #### ICMP
 ```
 Number of icmp Connections: 405033
@@ -136,6 +162,10 @@ Cat   Count
 0      1795
 1      1783
 ```
+
+<br><br><br><br>
+-------------------------------
+
 #### TCP
 ```
 Number of tcp Connections: 267832
@@ -148,6 +178,10 @@ Cat   Count
 4       166
 3         8
 ```
+
+<br><br><br><br>
+-------------------------------
+
 #### UDP
 ```
 Number of udp Connections: 27850
@@ -158,26 +192,45 @@ Cat   Count
 1      279
 2      134
 ```
+
+<br><br><br><br>
+-------------------------------
+
 ## Test ICMP vs TCP attack proportion
 - H0: the proportion of connections recorded that are attacks is not significantly different between ICMP and TCP
-- HA: the proportion of connections recorded that are attacks is significantly different betwwen ICMP and TCP
+- HA: the proportion of connections recorded that are attacks is significantly different between ICMP and TCP
 - ALPHA = 0.05
 - df = 1
 
-  **perform chi-square test for proportion**
+<br><br><br><br>
+-------------------------------
+
+
+## Perform chi-square test for proportion
 ```python
 from scipy.stats import chi2_contingency
 obs = np.array([[icmp_obs_attacks,
       icmp_obs_normal],[tcp_obs_attacks, tcp_obs_normal]])
 chi2, p, dof, expected = chi2_contingency(obs)
 ```
-#### RESULTS:
+
+<br><br><br><br>
+-------------------------------
+
+
+### RESULTS:
 ```
-Reject H0, there is a significant difference in attack/connection proportion between ICMP and TCP
+Reject H0, there is a significant difference
+in attack/connection proportion between ICMP and TCP
+
 chi-square test statistic: 192072.97
            p-value       : 0.00
            deg of freedom: 1.00
 ```
+
+<br><br><br><br>
+-------------------------------
+
 
 ## Test TCP vs UDP attack proportion
 - H0: the proportion of connections recorded that are attacks is not significantly different between TCP and UDP
@@ -185,7 +238,11 @@ chi-square test statistic: 192072.97
 - ALPHA = 0.05
 - df = 1
 
-  **perform chi-square test for proportion**
+<br><br><br><br>
+-------------------------------
+
+
+## Perform chi-square test for proportion
 
 #### RESULTS
 ```
@@ -196,30 +253,75 @@ chi-square test statistic: 33421.43
            deg of freedom: 1.00
 ```
 
-### Further test to perform:
+<br><br><br><br>
+-------------------------------
+
+
+## Further test to perform:
 - Create filters of services
 - Test if proportions of services:attack types are significantly different
 - Use top 10 count of services, so 10-row chi test
 
+
+<br><br><br><br>
+-------------------------------
+
 # Modeling
 
 ## I chose to only model for one category of attack
-  - Since denial of service floods servers with response requests, it was the majority category of attack type.
+  - Since `denial of service` floods servers with response requests, it was the majority category of attack type.
+  - Used only a logistic regression
+  - Built a reusable template that can take other models
+  - Iterated through and gathered Error Type metrics on selected list of features
+
+<br><br><br><br>
+-------------------------------
+
+
+## Attack labels fall into 5  categories:
+  0. Normal: not an attack
+  1. Probe: surveillance and other probing, e.g., port scanning
+  2. DOS: denial-of-service, e.g. syn flood
+  3. U2R:  unauthorized access to local superuser (root) privileges, e.g., various `buffer overflow`` attacks
+  4. R2L: unauthorized access from a remote machine, e.g. guessing password;
+   - (some descriptions of the problem have 5 categories)
+
+<br><br><br><br>
+-------------------------------
+
+### Over 20 types of attack to be categorized for model training
+  ![Attack labels per category](/images/attack_labels_per_category.png)
+  - **0 - Normal: 139294 categorized**
+  - **1 - Probe: 5833 categorized**
+  - **2 - DOS: 554699 categorized**
+  - **3 - U2R: 8 categorized**
+  - **4 - R2L: 166 categorized**
+
+<br><br><br><br>
+-------------------------------
 
 ## Transforming the data
-- split target into 1 for DOS and 0 for everything else
+- split target Y into 1 for DOS (Denial of Service) and 0 for everything else
 - wrote methods to auto-drop any features with >.60 correlation coefficients
 - dropped rows of the majority class to get 50/50 spread of Y values
+
+<br><br><br><br>
+-------------------------------
+## Better
 ![Correlation After](/images/correlation_after.png)
 
+<br><br><br><br>
+-------------------------------
 
-## Wrote utilities to model each feature independently
+## Wrote utilities to model list of chosen features, one by one
   - populate pandas dataframe with confusion matrix values
   - output metrics on each feature
 
-
+<br><br><br><br>
+-------------------------------
 
 ## Logistic Regression Results:
+#### ... on `duration`
 ```
 #--------------------------------------------#
      Running classifier on ['duration']
@@ -237,10 +339,10 @@ True Negatives: 2322
 False Positives: 26614
 True Negatives: 0
 
-Accuracy: 0.5418882864274034
-Classification_error: 0.4581117135725966
+Accuracy: 0.541
+Classification_error: 0.458
 Recall: 1.0
-Precision: 0.5228156993527334
+Precision: 0.522
 False Negative Rate: 0.0
 
 confusion matrix
@@ -249,7 +351,10 @@ confusion matrix
 
 ```
 
+<br><br><br><br>
+-------------------------------
 
+#### ... on `service`
 ```
 
  #--------------------------------------------#
@@ -268,38 +373,61 @@ confusion matrix
  False Positives: 2551
  True Negatives: 118
 
- Accuracy: 0.9540580084344608
- Classification_error: 0.0459419915655392
- Recall: 0.9959459923729687
- Precision: 0.9191185795814838
- False Negative Rate: 0.0040540076270312985
+ Accuracy: 0.954
+ Classification_error: 0.045
+ Recall: 0.995
+ Precision: 0.919
+ False Negative Rate: 0.004
 
  confusion matrix
  [[26437  2551]
   [  118 28989]]
 ```
+
+<br><br><br><br>
+-------------------------------
+
 ## Accuracy of Each Feature
 ![Single Feature Accuracy](/images/single_feature_accuracy.png)
+
+<br><br><br><br>
+-------------------------------
 
 ## False Negative Rate of Each Feature
 ![Single Feature Accuracy](/images/single_feature_false_negative.png)
 
+<br><br><br><br>
+-------------------------------
 
 # Bringing this into the world
 - How well can `derived features` be discerned in real time?
-  - How few do you need to make a good guess
+  - How few computed features do you need to make a good guess
   - What is the computation cost on the derivation of any given feature in real time
+- What is the cost of false negatives?
+  - If your home router is compromised
+  - Equihacks?
 
-# What I did
-- attempted to apply lasso, with little success
-  - instead incorporated `l1` into `LogisticRegression(penalty='l1')`
-- built a pipeline, scrapped it in favor of utilities that call each other
+<br><br><br><br>
+-------------------------------
+
+# What I Scrapped
+- Attempted to apply lasso, with little success
+  - Instead incorporated `l1` into `LogisticRegression(penalty='l1')`
+- Built a pipeline, scrapped it in favor of utilities that call each other
+- Applied linear regression
+  - Seemed better to keep it simple, since any model can be passed in
+
+<br><br><br><br>
+-------------------------------
 
 # What I would like to add
-- Fit the model to the other categories
-- Apply the model to the actual test data
-- Combinations on the features, and
+- Run the model on the actual test data
+- Run Combinations on the features
 - Cost matrix for the theoretical ramifications of False Negatives
+- Pass in other models
+
+<br><br><br><br>
+-------------------------------
 
 ## Features in the raw dataset
 
