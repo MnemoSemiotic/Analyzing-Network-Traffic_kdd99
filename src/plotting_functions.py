@@ -99,7 +99,7 @@ def log_label_for_factor_plot(df, col_name, x, hue, title):
         ax.set_title(title)
         ax.set(yscale="log")
 
-def my_confusion_matrix(y_test, y_pred):
+def my_confusion_matrix(y_test, y_pred, col):
     # Making Confusion Matrix
     from sklearn.metrics import confusion_matrix
 
@@ -107,23 +107,47 @@ def my_confusion_matrix(y_test, y_pred):
     conf_mat = confusion_matrix(y_test, y_pred)
     TN, FP, FN, TP = confusion_matrix(y_test, y_pred).ravel()
 
-    accuracy = (TP + TN)/(TP + TN + FP + FN)
-    classification_error  = (FP + FN)/(TP + TN + FP + FN)
+    if TP + TN + FP + FN > 0:
+        accuracy = (TP + TN)/(TP + TN + FP + FN)
+    else:
+        accuracy = 0
+
+    if TP + TN + FP + FN > 0:
+        classification_error  = (FP + FN)/(TP + TN + FP + FN)
+    else:
+        classification_error = 0
 
     # Sensitivity/True Positive Rate/Recall: When the actual value is positive, how often is the prediction correct?
-    recall = TP / (TP + FN)
+    if TP + FN > 0:
+        recall = TP / (TP + FN)
+    else:
+        recall = 0 # ignore d/b0
 
     # Specificity: When the actual value is negative, how often is the prediciton correct?
-    specificity = TN / (TN + FP)
+    if TN + FP > 0:
+        specificity = TN / (TN + FP)
+    else:
+        specificity = 0 # ignore d/b0
 
     # False Positive Rate: When the actual value is negative, how often is the prediction incorrect?
-    false_positive_rate = FP / (TN + FP)
+    if TN + FP > 0:
+        false_positive_rate = FP / (TN + FP)
+    else:
+        false_positive_rate = 0 # ignore d/b0
+
+    # False negative rate (FNR)
+    if FN + TP > 0:
+        false_negative_rate = FN / (FN + TP)
+    else:
+        false_negative_rate = 0
 
     # Precision: When a positive value is predicted, how often is the prediction incorrect?false_positive_rate = FP / (TN + FP)
     if TP + FP > 0:
         precision = TP / (TP + FP)
     else:
-        precision = 0
+        precision = 0 # ignore d/b0
+
+
 
     print('True Positives: {}'.format(TP))
     print('True Negatives: {}'.format(TN))
@@ -134,20 +158,25 @@ def my_confusion_matrix(y_test, y_pred):
     print('Classification_error: {}'.format(classification_error))
     print('Recall: {}'.format(recall))
     print('Precision: {}'.format(precision))
+    print('False Negative Rate: {}'.format(false_negative_rate))
     print()
     print('confusion matrix')
     print(conf_mat)
-    _plot_confusion_matrix(conf_mat)
 
-    return TN, FP, FN, TP, accuracy, recall, specificity, false_positive_rate, precision
+    plot_confusion_matrix(conf_mat, title='{}_Confusion_Matrix'.format(str(col[0])))
 
-def _plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
+    return TN, FP, FN, TP, accuracy, recall, specificity, false_positive_rate, false_negative_rate, precision
+
+def plot_confusion_matrix(cm, title='Confusion_Matrix', cmap=plt.cm.Blues):
+
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar
     plt.tight_layout
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+    filename = 'images/{}.png'.format(title)
+    # plt.savefig(filename)
 
 
 if __name__ == "__main__": main()
