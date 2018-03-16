@@ -167,7 +167,8 @@ Cat   Count
   **perform chi-square test for proportion**
 ```python
 from scipy.stats import chi2_contingency
-obs = np.array([[icmp_obs_attacks, icmp_obs_normal],[tcp_obs_attacks, tcp_obs_normal]])
+obs = np.array([[icmp_obs_attacks,
+      icmp_obs_normal],[tcp_obs_attacks, tcp_obs_normal]])
 chi2, p, dof, expected = chi2_contingency(obs)
 ```
 #### RESULTS:
@@ -201,20 +202,104 @@ chi-square test statistic: 33421.43
 - Use top 10 count of services, so 10-row chi test
 
 # Modeling
-- split data into "this" and "everything else"
-
 
 ## I chose to only model for one category of attack
   - Since denial of service floods servers with response requests, it was the majority category of attack type.
 
+## Transforming the data
+- split target into 1 for DOS and 0 for everything else
+- wrote methods to auto-drop any features with >.60 correlation coefficients
+- dropped rows of the majority class to get 50/50 spread of Y values
+![Correlation After](/images/correlation_after.png)
+
+
+## Wrote utilities to model each feature independently
+  - populate pandas dataframe with confusion matrix values
+  - output metrics on each feature
+
+
+
+## Logistic Regression Results:
+```
+#--------------------------------------------#
+     Running classifier on ['duration']
+#--------------------------------------------#
+
+
+Modified Y to balance 1s and 0s
+1    145236
+0    145236
+Name: attack_category, dtype: int64
+
+
+True Positives: 29159
+True Negatives: 2322
+False Positives: 26614
+True Negatives: 0
+
+Accuracy: 0.5418882864274034
+Classification_error: 0.4581117135725966
+Recall: 1.0
+Precision: 0.5228156993527334
+False Negative Rate: 0.0
+
+confusion matrix
+[[ 2322 26614]
+ [    0 29159]]
+
+```
+
+
+```
+
+ #--------------------------------------------#
+      Running classifier on ['service']
+ #--------------------------------------------#
+
+
+ Modified Y to balance 1s and 0s
+ 1    145236
+ 0    145236
+ Name: attack_category, dtype: int64
+
+
+ True Positives: 28989
+ True Negatives: 26437
+ False Positives: 2551
+ True Negatives: 118
+
+ Accuracy: 0.9540580084344608
+ Classification_error: 0.0459419915655392
+ Recall: 0.9959459923729687
+ Precision: 0.9191185795814838
+ False Negative Rate: 0.0040540076270312985
+
+ confusion matrix
+ [[26437  2551]
+  [  118 28989]]
+```
+## Accuracy of Each Feature
+![Single Feature Accuracy](/images/single_feature_accuracy.png)
+
+## False Negative Rate of Each Feature
+![Single Feature Accuracy](/images/single_feature_false_negative.png)
+
+
+# Bringing this into the world
+- How well can `derived features` be discerned in real time?
+  - How few do you need to make a good guess
+  - What is the computation cost on the derivation of any given feature in real time
 
 # What I did
-
+- attempted to apply lasso, with little success
+  - instead incorporated `l1` into `LogisticRegression(penalty='l1')`
+- built a pipeline, scrapped it in favor of utilities that call each other
 
 # What I would like to add
-- More meaningful Hypothesis Testing
-- Apply the model to the actual test data provided
-- Pairplots on each category
+- Fit the model to the other categories
+- Apply the model to the actual test data
+- Combinations on the features, and
+- Cost matrix for the theoretical ramifications of False Negatives
 
 ## Features in the raw dataset
 

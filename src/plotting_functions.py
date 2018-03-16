@@ -30,7 +30,7 @@ def plot_hist_basic(df, col):
     plt.xticks(rotation=40)
     return ax
 
-def corr_heat(df, title):
+def corr_heat(df, title='Correlation Matrix'):
     # corr = df.corr()
     # mask = np.zeros_like(corr, dtype=np.bool)
     # mask[np.triu_indices_from(mask)] = True
