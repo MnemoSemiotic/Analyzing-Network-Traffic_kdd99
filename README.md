@@ -13,7 +13,7 @@ Tovio Roberts - Galvanize Data Science Analytics capstone
 - Explored the kdd99 data
 - Tested significant differences in ratios of attack categories
 - Downsampled majority class
-- Applied a logistic regression model to single features in order to compare False Negative and Accuracy rates
+- Applied a logistic regression model to single features and recorded False Negative and Accuracy rates
 
 <br><br><br><br><br><br><br><br>
 --------------------------------
