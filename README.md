@@ -389,11 +389,15 @@ chi-square test statistic: 33421.43
 -------------------------------
 
 # What I would like to add
-- Run the model on the actual test data
-- Train models on the other attack categories
-- Run Combinations on the features
-- Cost matrix for the theoretical ramifications of False Negatives
-- pass in kNN model maybe?
+- Modeling
+  - Run the model on the actual test data
+  - Train models on the other attack categories
+  - pass in kNN model maybe?
+  - Run Combinations on the features
+- Real World
+  - Cost matrix for the theoretical ramifications of False Negatives
+  - Incorporate data related to computational cost for features derived in real time
+  - Work with current data set of attacks
 
 <br><br><br><br>
 -------------------------------
