@@ -142,7 +142,7 @@ udp      27597
 
 ### Are the proportions of connections that are attacks consistent across protocol types?
 - recall that `normal.` is not an attack.
-- we will use the general category to get counts
+- we will get counts of normal and everything else
 
 From the graphics above, it seems likely that ICMP garners a higher proportion of attacks than TCP or UDP. We can perform a chi-squared test for proportions to check if there is a statistical difference.
 - ALPHA = 0.05
