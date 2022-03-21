@@ -1,5 +1,5 @@
 # analyzing-network-traffic_kdd99
-Tovio Roberts - Galvanize Data Science Analytics capstone
+Tovio - Galvanize Data Science Analytics capstone
 
 # Overview
 
